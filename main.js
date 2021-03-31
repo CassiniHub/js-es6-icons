@@ -132,6 +132,7 @@ function print(array) {
     
     const container = $('.icons');
     
+    container.html('');
     array.forEach(item => {
         
         if (item.type === 'user') {
@@ -169,6 +170,34 @@ function colorIcons(array, types, colors) {
     });
 
     return newArray;
+}  
+
+function addSelectOption(types) {
+    
+    const select = $('#type');
+    
+    types.forEach(item => {
+
+        const optionHtml = `
+        <option value="${item}">${item}</option>
+        `;
+        
+        select.append(optionHtml);
+    });
+    
+}
+
+function filterArray(array, key) {
+    
+    const filteredArray = array.filter(item => {
+
+        if (item.type == key) {
+            
+            return item;
+        }
+    });
+
+    return filteredArray;
 }
 
 // - - - - - - - - - - - - - - - - - -
@@ -186,16 +215,37 @@ function init() {
     // Milestone 2
     // Coloriamo le icone per tipo
     
-    const icons  = getIconsDb();
-    const colors = getColors();
-    const types = getTypes(icons);
-    
-    const coloredIcons = colorIcons(icons, types, colors);
-    print(coloredIcons);
     // - - - - - - - - - - - - - - 
 
     // Milestone 3
     // Creiamo una select con i tipi di icone e usiamola per filtrare le icone
+
+    const icons        = getIconsDb();
+    const colors       = getColors();
+    const types        = getTypes(icons);
+    const coloredIcons = colorIcons(icons, types, colors);
+    
+    print(coloredIcons);
+    addSelectOption(types);
+
+    const select = $('#type');
+
+    select.change(function() {
+        
+        const currentType = $(this).val();
+        
+        if (types.includes(currentType)) {
+            
+            const filteredIcons = filterArray(coloredIcons, currentType);
+
+            print(filteredIcons);
+        } else {
+
+            print(coloredIcons);
+        }
+    });
+    
+    
     
 
 }
