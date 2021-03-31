@@ -101,10 +101,32 @@ function getIconsDb() {
     ];
 }
 
+
 function getColors() {
       
     return ["blue", "orange", "purple", "rose", "red"]
 }
+
+
+function getTypes(array) {
+    
+    const types = [];
+    
+    array.forEach((item) => {
+
+        if (!types.includes(item.type)) {
+            
+            types.push(item.type);
+        }
+    })
+
+    return types;
+}
+
+
+// - - - - - - - - - - - - - - - - -
+
+// Data manipolation functions
 
 function print(array) {
     
@@ -112,9 +134,19 @@ function print(array) {
     
     array.forEach(item => {
         
+        if (item.type === 'user') {
+            
+            item.color == 'purple';
+        } else if (item.type === 'animal'){
+
+            item.color == 'blue';
+        } else if (item.type === 'vegetable'){
+
+            item.color == 'orange'
+        }
         const iconHtml = `
             <div>
-                <i class="${item.family} ${item.prefix}${item.name}" style="color:blue"></i>
+                <i class="${item.family} ${item.prefix}${item.name}" style="color:${item.color}"></i>
                 <div class="title">${item.name.toUpperCase()}</div>
             </div>
         `;
@@ -122,22 +154,44 @@ function print(array) {
         container.append(iconHtml);
     });
 }
+
+function colorIcons(array, types, colors) {
+    
+    const newArray = array.map(item => {
+
+        const itemClone = {...item};
+        const iconType  = itemClone.type;
+        const indexType = types.indexOf(iconType);
+        const color     = colors[indexType];
+        
+        itemClone.color = color;
+        return itemClone;
+    });
+
+    return newArray;
+}
+
+// - - - - - - - - - - - - - - - - - -
+
+// Init
+
 function init() {
     
     // Milestone 1
     // Partendo dalla seguente struttura dati , mostriamo
     //in pagina tutte le icone disponibili come da layout.
 
-    const icons  = getIconsDb();
-    const colors = getColors();
-
-    print(icons);
-
     // - - - - - - - - - - - - - - 
 
     // Milestone 2
     // Coloriamo le icone per tipo
     
+    const icons  = getIconsDb();
+    const colors = getColors();
+    const types = getTypes(icons);
+    
+    const coloredIcons = colorIcons(icons, types, colors);
+    print(coloredIcons);
     // - - - - - - - - - - - - - - 
 
     // Milestone 3
